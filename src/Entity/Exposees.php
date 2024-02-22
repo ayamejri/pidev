@@ -4,9 +4,12 @@ namespace App\Entity;
 
 use App\Repository\ExposeesRepository;
 use Doctrine\DBAL\Types\Types;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Doctrine\ORM\EntityManagerInterface;
 
 #[ORM\Entity(repositoryClass: ExposeesRepository::class)]
 class Exposees
@@ -15,15 +18,9 @@ class Exposees
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
+    
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "Veuillez Remplir Ce Champs*")]
-
-    private ?string $ide = null;
-
-    #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: "Veuillez Remplir Ce Champs*")]
-
     private ?string $nom_e = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -40,9 +37,12 @@ class Exposees
     #[ORM\Column]
     #[Assert\NotBlank(message: "Veuillez Remplir Ce Champs*")]
     private $imageExposees = null;
-
+    
+    #[ORM\OneToMany(mappedBy: 'exposee', targetEntity: Produits::class)]
+    private Collection $Produits;
     public function __construct()
     {
+        $this->Produits = new ArrayCollection();
         $this->date_debut = new \DateTime('now');
         $this->date_fin = new \DateTime('now');
     }
@@ -50,18 +50,6 @@ class Exposees
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getIde(): ?string
-    {
-        return $this->ide;
-    }
-
-    public function setIde(string $ide): static
-    {
-        $this->ide = $ide;
-
-        return $this;
     }
 
     public function getNomE(): ?string
@@ -106,12 +94,12 @@ public function setDateFin(\DateTimeInterface $date_fin): static
         return $this->produits_existants;
     }
 
-    public function setProduitsExistants(string $produits_existants): static
-    {
-        $this->produits_existants = $produits_existants;
+    //public function setProduitsExistants(string $produits_existants): static
+   // {
+    //    $this->produits_existants = $produits_existants;
 
-        return $this;
-    }
+    //    return $this;
+   // }
     public function getImageExposees()
     {
         return $this->imageExposees;
@@ -136,5 +124,20 @@ public function setDateFin(\DateTimeInterface $date_fin): static
                 ->atPath('date_fin')
                 ->addViolation();
         }
+    }
+
+    public function setProduitsExistants(string $produits_existants): static
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $produitRepository = $entityManager->getRepository(Produits::class);
+        $produit = $produitRepository->find($produits_existants);
+        if (!$produit) {
+            throw new \RuntimeException('Produit Inexistant');
+        }
+        $this->Produits->add($produit);
+
+        $this->produits_existants = $produits_existants;
+
+        return $this;
     }
 }

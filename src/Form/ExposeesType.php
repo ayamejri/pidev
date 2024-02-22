@@ -13,15 +13,11 @@ class ExposeesType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('ide')
             ->add('nom_e')
             ->add('date_debut')
             ->add('date_fin')
             ->add('imageExposees',FileType::class, array('data_class' => null,'required' => false))
-            ->add('produits_existants', IntegerType::class, [
-                'label' => 'Produits',
-                'required' => false,
-            ]);
+            ->add('produits_existants');
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -22,7 +22,13 @@ class ProduitsController extends AbstractController
             'produits' => $produitsRepository->findAll(),
         ]);
     }
-
+    #[Route('/front', name: 'app_produit_indexFront', methods: ['GET'])]
+    public function indexFront(ProduitsRepository $produitsRepository): Response
+    {
+        return $this->render('produits/indexFront.html.twig', [
+            'produits' => $produitsRepository->findAll(),
+        ]);
+    }
     #[Route('/new', name: 'app_produits_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -67,7 +73,7 @@ class ProduitsController extends AbstractController
             
             $entityManager->flush();
             
-            return $this->redirectToRoute('app_produits_indexFront', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_produits_index', [], Response::HTTP_SEE_OTHER);
         }
         
         return $this->render('produits/edit.html.twig', [

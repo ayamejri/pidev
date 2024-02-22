@@ -25,7 +25,7 @@ class ExposeesController extends AbstractController
     #[Route('/front', name: 'app_exposee_Front_page', methods: ['GET'])]
     public function Front_page(ExposeesRepository $exposeeRepository): Response
     {
-        return $this->render('evenement/Front_page.html.twig', [
+        return $this->render('exposees/Front_page.html.twig', [
             'exposees' => $exposeeRepository->findAll(),
         ]);
     }

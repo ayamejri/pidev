@@ -22,7 +22,7 @@ Exposees index
         <tbody>
         {% for exposee in exposees %}
             <tr>
-            <td>{{ exposee.ide }}</td>
+            <td>{{ exposee.id }}</td>
 <td><img src="{{ asset('uploads/' ~exposee.imageExposees) }}" style="width:100px; height:100px;" alt=""></td>
             <td>{{ exposee.nomE }}</td>
             <td>{{ exposee.dateDebut ? exposee.dateDebut|date('Y-m-d') : '' }}</td>

@@ -14,7 +14,6 @@ class ProduitsType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('idp')
             ->add('description')
             ->add('prix')
             ->add('ressource',FileType::class, array('data_class' => null,'required' => false))

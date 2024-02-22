@@ -16,9 +16,7 @@ class Produits
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: "Veuillez Remplir Ce Champs*")]
-    private ?string $idp = null;
+
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "Veuillez Remplir Ce Champs*")]
@@ -37,17 +35,7 @@ class Produits
         return $this->id;
     }
 
-    public function getIdp(): ?string
-    {
-        return $this->idp;
-    }
-
-    public function setIdp(string $idp): static
-    {
-        $this->idp = $idp;
-
-        return $this;
-    }
+   
 
     public function getDescription(): ?string
     {

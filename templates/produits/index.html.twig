@@ -18,7 +18,7 @@
         <tbody>
         {% for produit in produits %}
             <tr>
-                <td>{{ produit.idp }}</td>
+                <td>{{ produit.id }}</td>
                 <td>{{ produit.description }}</td>
                 <td>{{ produit.prix }}</td>
                 <td><img src= "{{ asset('uploads/' ~produit.Ressource)}}" style=" width:100px; height:100 px; " alt=""></td> 

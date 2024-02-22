@@ -1,41 +1,31 @@
 {% extends 'front.html.twig' %}
 
-
-
 {% block body %}
-
-
     <div class="service">
         <div class="container">
             <div class="section-header text-center">
-              <div id="google_translate_element"></div>
-
+                <div id="google_translate_element"></div>
                 <h4 style="margin-top:50px; margin-bottom:50px;">Liste des Exposees</h4>
+                <a href="{{ path('app_produit_indexFront') }}">Aller à la liste des Produits</a>
+
             </div>
             <div class="row">
-           {% for exposee in exposees %}
-        <div class="col-lg-4 col-md-6 mb-4">
-        <div class="service-item">
-          <img src="{{ asset('uploads/' ~exposee.imageExposee)}}" style=" width:360px; height:250px; " alt="">
-          <p><strong style="color:#696969">Nom Exposee:</strong> {{ exposee.nom_e }}</p>
-          <p><strong style="color:#696969">Date de début:</strong> {{ exposee.date_debut ? exposee.date_debut|date('Y-m-d') : '' }}</p>
-          <p><strong style="color:#696969">Date de fin:</strong> {{ exposee.dateFin ? exposee.date_fin|date('Y-m-d') : '' }}</p>
-         <br>
-         <br>
-
-        </div>
-      </div>
-      {% else %}
-      <div class="col">
-        <p class="text-center">Aucun Exposé trouvé.</p>
-      </div>
-
+                {% for exposee in exposees %}
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="service-item">
+                            <img src="{{ asset('uploads/' ~exposee.imageExposees)}}" style=" width:360px; height:250px; " alt="">
+                            <p><strong style="color:#696969">Nom Exposee:</strong> {{ exposee.getNomE() }}</p>
+                            <p><strong style="color:#696969">Date de début:</strong> {{ exposee.getDateDebut() ? exposee.getDateDebut()|date('Y-m-d') : '' }}</p>
+                            <p><strong style="color:#696969">Date de fin:</strong> {{ exposee.getDateFin() ? exposee.getDateFin()|date('Y-m-d') : '' }}</p>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="col">
+                        <p class="text-center">Aucun Exposé trouvé.</p>
+                    </div>
                 {% endfor %}
-
             </div>
-
         </div>
     </div>
     <br>
-    
 {% endblock %}

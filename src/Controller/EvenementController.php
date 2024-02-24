@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Evenement;
+use App\Entity\PdfGeneratorService;
 use App\Form\EvenementType;
 use App\Repository\EvenementRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -10,25 +11,122 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
+use Knp\Component\Pager\PaginatorInterface;
 
 #[Route('/evenement')]
 class EvenementController extends AbstractController
 {
-    #[Route('/', name: 'app_evenement_index', methods: ['GET'])]
-    public function index(EvenementRepository $evenementRepository): Response
-    {
-        return $this->render('evenement/index.html.twig', [
-            'evenements' => $evenementRepository->findAll(),
+
+
+    
+    #[Route('/pdf', name: 'generator_serviceEvenement')]
+    public function pdfService(): Response
+    { 
+        $evenements= $this->getDoctrine()
+        ->getRepository(Evenement::class)
+        ->findAll();
+
+   
+
+        $html =$this->renderView('evenement/evenementpdf.html.twig', ['evenements' => $evenements]);
+        $pdfGeneratorService=new PdfGeneratorService();
+        $pdf = $pdfGeneratorService->generatePdf($html);
+
+        return new Response($pdf, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="document.pdf"',
         ]);
+
+    }
+
+
+    #[Route('/', name: 'app_evenement_index', methods: ['GET','POST'])]
+    public function index(EntityManagerInterface $entityManager,EvenementRepository $evenementRepository,Request $request): Response
+    {
+        $evenements = $entityManager
+        ->getRepository(Evenement::class)
+        ->findAll();
+
+        /////////
+        $back = null;
+        
+        if($request->isMethod("POST")){
+            if ( $request->request->get('optionsRadios')){
+                $SortKey = $request->request->get('optionsRadios');
+                switch ($SortKey){
+                    case 'themeEvenement':
+                        $evenements = $evenementRepository->SortByNomEvenement();
+                        break;
+
+                    case 'typeEvenement':
+                        $evenements = $evenementRepository->SortByTypeEvenement();
+                        break;
+
+                    case 'nbrParticipant':
+                        $evenements = $evenementRepository->SortBynbrParticipant();
+                        break;
+
+
+                }
+            }
+            else
+            {
+                $type = $request->request->get('optionsearch');
+                $value = $request->request->get('Search');
+                switch ($type){
+                    case 'themeEvenement':
+                        $evenements = $evenementRepository->findBynomEvenement($value);
+                        break;
+
+                    case 'typeEvenement':
+                        $evenements = $evenementRepository->findBytypeEvenement($value);
+                        break;
+
+                    case 'dateDebut':
+                        $evenements = $evenementRepository->findBydateDebut($value);
+                        break;
+
+                    case 'dateFin':
+                        $evenements = $evenementRepository->findBydateFin($value);
+                        break;
+
+
+                }
+            }
+
+            if ( $evenements){
+                $back = "success";
+            }else{
+                $back = "failure";
+            }
+        }
+            ////////
+
+    return $this->render('evenement/index.html.twig', [
+        'evenements' => $evenements,'back'=>$back
+    ]);
     }
 
     #[Route('/front', name: 'app_evenement_indexFront', methods: ['GET'])]
-    public function indexfront(EvenementRepository $evenementRepository): Response
+    public function indexfront(EntityManagerInterface $entityManager,Request $request,PaginatorInterface $paginator): Response
     {
+
+        $evenements = $entityManager
+        ->getRepository(Evenement::class)
+        ->findAll();
+
+            $evenements = $paginator->paginate(
+            $evenements, /* query NOT result */
+            $request->query->getInt('page', 1),
+            3
+        );
+
+
         return $this->render('evenement/indexFront.html.twig', [
-            'evenements' => $evenementRepository->findAll(),
+            'evenements' => $evenements,
         ]);
+
+
     }
 
     #[Route('/new', name: 'app_evenement_new', methods: ['GET', 'POST'])]

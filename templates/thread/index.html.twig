@@ -1,0 +1,55 @@
+{% extends 'backend.html.twig' %}
+
+{% block title %}Thread index{% endblock %}
+
+{% block body %}
+    <h1>Thread index</h1>
+
+    <form action="{{ path('app_thread_index') }}" method="get">
+        <div>
+            <label for="keyword">Keyword:</label>
+            <input type="text" id="keyword" name="keyword">
+            <button type="submit">Search</button>
+        </div>
+        <div>
+            <label for="sortBy">Sort By:</label>
+            <select id="sortBy" name="sortBy">
+                <option value="">-- Select --</option>
+                <option value="createdAtDescending">Created At (Descending)</option>
+            </select>
+            <button type="submit">Sort</button>
+        </div>
+    </form>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Topic</th>
+                <th>Created At</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for thread in threads %}
+            <tr>
+                <td>{{ thread.id }}</td>
+                <td>{{ thread.title }}</td>
+                <td>{{ thread.topic }}</td>
+                <td>{{ thread.createdat ? thread.createdat|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_thread_show', {'id': thread.id}) }}">Show</a>
+                    <a href="{{ path('app_thread_edit', {'id': thread.id}) }}">Edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">No records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_thread_new') }}">Create new</a>
+{% endblock %}

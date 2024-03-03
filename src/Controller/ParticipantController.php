@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Participant;
 use App\Entity\Evenement;
 use App\Form\ParticipantType;
+use App\Service\MailerService;
 use App\Repository\ParticipantRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,7 +25,7 @@ class ParticipantController extends AbstractController
     }
 
     #[Route('{idevent}/new', name: 'app_participant_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager,Evenement $idevent): Response
+    public function new(Request $request, EntityManagerInterface $entityManager,MailerService $mailer,Evenement $idevent): Response
     {
         $participant = new Participant();
         $participant->setEvenement($idevent);
@@ -33,6 +34,8 @@ class ParticipantController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $to = $participant->getDescription();
+            $mailer->sendEmail($to);
             $entityManager->persist($participant);
             $entityManager->flush();
 

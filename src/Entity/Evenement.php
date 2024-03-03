@@ -46,6 +46,9 @@ class Evenement
     #[ORM\OneToMany(mappedBy: 'Evenement', targetEntity: Participant::class)]
     private Collection $Participant;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $Color = null;
+
     public function __construct()
     {
         $this->Participant = new ArrayCollection();
@@ -172,6 +175,18 @@ class Evenement
                 $participant->setParticipant(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getColor(): ?string
+    {
+        return $this->Color;
+    }
+
+    public function setColor(?string $Color): static
+    {
+        $this->Color = $Color;
 
         return $this;
     }

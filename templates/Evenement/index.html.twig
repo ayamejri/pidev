@@ -99,6 +99,8 @@ evenement index
                 <td>
                     <a href="{{ path('app_evenement_show', {'id': evenement.id}) }}">show</a>
                     <a href="{{ path('app_evenement_edit', {'id': evenement.id}) }}">edit</a>
+                    <td><a href="{{ path('app_qr_codes', {'id': evenement.id}) }}">qr code</a></td>
+
                 </td>
             </tr>
         {% else %}
@@ -113,4 +115,5 @@ evenement index
 
     
     <p><a href="{{ path('generator_serviceEvenement') }}" class="btn btn-primary px-3 py-1">PDF</a></p>
+    <p><a href="{{ path('app_evenement_indexstat') }}" class="btn btn-primary px-3 py-1">stat</a></p>
 {% endblock %}

@@ -12,11 +12,34 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Knp\Component\Pager\PaginatorInterface;
+use App\Controller\QrCodeController;
 
 #[Route('/evenement')]
 class EvenementController extends AbstractController
 {
 
+    #[Route('/stat', name: 'app_evenement_indexstat', methods: ['GET','POST'])]
+    public function index3(EvenementRepository $evenementRepository): Response
+    {
+        $evenement = $evenementRepository->findAll();
+        $themeEvenement = [];
+        $color = [];
+        $evcount = [];
+
+        // On "démonte" les données pour les séparer tel qu'attendu par ChartJS
+        foreach($evenement as $evenements){
+            $themeEvenement[] = $evenements->getThemeEvenement();
+            $color[] = $evenements->getColor();
+            $evcount[] = count($evenements->getParticipant());
+        }
+
+        
+        return $this->render('evenement/stat.html.twig', [
+            'themeEvenement' => json_encode($themeEvenement),
+            'color' => json_encode($color),
+            'evcount' => json_encode($evcount),
+        ]);
+    }
 
     
     #[Route('/pdf', name: 'generator_serviceEvenement')]
@@ -108,6 +131,10 @@ class EvenementController extends AbstractController
     }
 
     #[Route('/front', name: 'app_evenement_indexFront', methods: ['GET'])]
+   
+   
+   
+   
     public function indexfront(EntityManagerInterface $entityManager,Request $request,PaginatorInterface $paginator): Response
     {
 
@@ -129,6 +156,11 @@ class EvenementController extends AbstractController
 
     }
 
+   
+   
+   
+   
+   
     #[Route('/new', name: 'app_evenement_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {

@@ -9,6 +9,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\ColorType;
 
 class EvenementType extends AbstractType
 {
@@ -21,6 +22,7 @@ class EvenementType extends AbstractType
             ->add('dateDebut')
             ->add('dateFin')
             ->add('nbrParticipant')
+            ->add('Color',ColorType::class)
             ->add('Publicite',EntityType::class,['class' => Publicite::class,
             'choice_label' => 'sponsor',
             'label'=> 'Nom Sponsor' ])

@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Post{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>Edit Post</h1>
+
+        <div class="card">
+            <div class="card-body">
+                {{ include('post/_form.html.twig', {'button_label': 'Update'}) }}
+            </div>
+        </div>
+
+        <a href="{{ path('app_post_indexf') }}" class="btn btn-primary mt-3">Back to List</a>
+    </div>
+{% endblock %}

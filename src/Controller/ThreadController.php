@@ -27,8 +27,27 @@ class ThreadController extends AbstractController
         } else {
             $threads = $threadRepository->findAll();
         }
+        
 
         return $this->render('thread/index.html.twig', [
+            'threads' => $threads,
+        ]);
+    }
+    #[Route('/threadf', name: 'app_thread_indexf', methods: ['GET'])]
+    public function indexf(ThreadRepository $threadRepository, Request $request): Response
+    {
+        $keyword = $request->query->get('keyword');
+        $sortBy = $request->query->get('sortBy');
+
+        if ($keyword) {
+            $threads = $threadRepository->searchByKeyword($keyword);
+        } elseif ($sortBy === 'createdAtDescending') {
+            $threads = $threadRepository->sortByCreatedAtDescending();
+        } else {
+            $threads = $threadRepository->findAll();
+        }
+
+        return $this->render('thread/indexf.html.twig', [
             'threads' => $threads,
         ]);
     }
@@ -52,7 +71,40 @@ class ThreadController extends AbstractController
             'form' => $form,
         ]);
     }
+    #[Route('threadf/newf', name: 'app_thread_newf', methods: ['GET', 'POST'])]
+    public function newf(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $thread = new Thread();
+        $form = $this->createForm(ThreadType::class, $thread);
+        $form->handleRequest($request);
 
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($thread);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_thread_indexf', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('thread/newf.html.twig', [
+            'thread' => $thread,
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/threadf/{id}', name: 'app_thread_showf', methods: ['GET'])]
+    public function showf(Thread $thread, ThreadRepository $threadRepository): Response
+    {
+        // Fetch the thread entity
+        $thread = $threadRepository->find($thread->getId());
+        
+        // Fetch the related posts for the thread
+        $posts = $thread->getRelation();
+
+        return $this->render('thread/showf.html.twig', [
+            'thread' => $thread,
+            'posts' => $posts,
+        ]);
+    }
     #[Route('/{id}', name: 'app_thread_show', methods: ['GET'])]
     public function show(Thread $thread, ThreadRepository $threadRepository): Response
     {
@@ -85,15 +137,63 @@ class ThreadController extends AbstractController
             'form' => $form,
         ]);
     }
-
-    #[Route('/{id}', name: 'app_thread_delete', methods: ['POST'])]
-    public function delete(Request $request, Thread $thread, EntityManagerInterface $entityManager): Response
+    #[Route('/{id}/editf', name: 'app_thread_editf', methods: ['GET', 'POST'])]
+    public function editf(Request $request, Thread $thread, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$thread->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($thread);
+        $form = $this->createForm(ThreadType::class, $thread);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
+
+            return $this->redirectToRoute('app_thread_indexf', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->redirectToRoute('app_thread_index', [], Response::HTTP_SEE_OTHER);
+        return $this->renderForm('thread/editf.html.twig', [
+            'thread' => $thread,
+            'form' => $form,
+        ]);
     }
+
+    #[Route('/{id}', name: 'app_thread_delete', methods: ['POST'])]
+public function delete(Request $request, Thread $thread, EntityManagerInterface $entityManager): Response
+{
+    if ($this->isCsrfTokenValid('delete'.$thread->getId(), $request->request->get('_token'))) {
+        // Fetch related posts
+        $posts = $thread->getRelation();
+        
+        // Delete each related post
+        foreach ($posts as $post) {
+            $entityManager->remove($post);
+        }
+
+        // Now delete the thread
+        $entityManager->remove($thread);
+        $entityManager->flush();
+    }
+
+    return $this->redirectToRoute('app_thread_index', [], Response::HTTP_SEE_OTHER);
 }
+#[Route('/threadf/{id}', name: 'app_thread_deletef', methods: ['POST'])]
+public function deletef(Request $request, Thread $thread, EntityManagerInterface $entityManager): Response
+{
+    if ($this->isCsrfTokenValid('delete'.$thread->getId(), $request->request->get('_token'))) {
+        // Fetch related posts
+        $posts = $thread->getRelation();
+        
+        // Delete each related post
+        foreach ($posts as $post) {
+            $entityManager->remove($post);
+        }
+
+        // Now delete the thread
+        $entityManager->remove($thread);
+        $entityManager->flush();
+    }
+
+    return $this->redirectToRoute('app_thread_indexf', [], Response::HTTP_SEE_OTHER);
+}
+
+    
+}
+

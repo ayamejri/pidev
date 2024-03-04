@@ -15,6 +15,7 @@ class ThreadType extends AbstractType
             ->add('title')
             ->add('topic')
             ->add('createdat')
+            ->add('author')
         ;
     }
 

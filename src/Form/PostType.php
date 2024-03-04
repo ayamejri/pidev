@@ -23,6 +23,7 @@ class PostType extends AbstractType
                 'format' => 'yyyy-MM-dd HH:mm:ss', // Date and time format
                 // You can add more options like 'attr' to specify additional attributes for the input field if needed
             ])
+            ->add('author')
             ->add('thread', EntityType::class, [ 
                 'class' => Thread::class, 
                 'choice_label' => 'title', 

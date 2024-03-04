@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Thread{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1 class="mb-4">Thread: {{ thread.title }}</h1>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Thread Information</h5>
+                <ul class="list-group">
+                    <li class="list-group-item"><strong>Title:</strong> {{ thread.title }}</li>
+                    <li class="list-group-item"><strong>Topic:</strong> {{ thread.topic }}</li>
+                    <li class="list-group-item"><strong>Created At:</strong> {{ thread.createdat ? thread.createdat|date('Y-m-d H:i:s') : '' }}</li>
+                    <li class="list-group-item"><strong>Author:</strong> {{ thread.author }}</li>
+                </ul>
+                
+            </div>
+        </div>
+
+        <h2 class="mb-4">Posts related to this thread</h2>
+        <div class="list-group">
+            {% if posts is not empty %}
+                {% for post in posts %}
+                    <div class="list-group-item">
+                        <h5 class="mb-1">{{ post.title }}</h5>
+                        <p class="lead mb-1">{{ post.description }}</p> <!-- Use lead class for larger text -->
+                        <p class="mb-1">{{ post.author }}</p>
+                        <small class="text-muted">Created At: {{ post.createdAt ? post.createdAt|date('Y-m-d H:i:s') : '' }}</small>
+                        <a href="{{ path('app_post_showf', {'id': post.id}) }}" class="btn btn-primary btn-sm float-right">Read More</a>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No posts found for this thread.</p>
+            {% endif %}
+        </div>
+
+        <a href="{{ path('app_thread_index') }}" class="btn btn-primary mt-4">Back to List</a>
+        <a href="{{ path('app_thread_edit', {'id': thread.id}) }}" class="btn btn-secondary mt-4">Edit</a>
+        {{ include('thread/_deletef_form.html.twig') }}
+    </div>
+{# -------------------------- Share ------------------------------------  #}
+         <div class="sharethis-inline-share-buttons"></div>
+         {# -------------------------- Share ------------------------------------  #}    
+<script type="text/javascript" src="https://platform-api.sharethis.com/js/sharethis.js#property=64065d7b567fbf001a2d5d17&product=inline-share-buttons&source=platform" async="async"></script>
+{% endblock %}

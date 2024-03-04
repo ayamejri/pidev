@@ -28,6 +28,9 @@ class Thread
     #[ORM\OneToMany(mappedBy: 'thread', targetEntity: Post::class)]
     private Collection $relation;
 
+    #[ORM\Column(length: 255)]
+    private ?string $author = null;
+
     public function __construct()
     {
         $this->relation = new ArrayCollection();
@@ -101,6 +104,18 @@ class Thread
                 $relation->setThread(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAuthor(): ?string
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(string $author): static
+    {
+        $this->author = $author;
 
         return $this;
     }

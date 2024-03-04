@@ -38,6 +38,7 @@
                 <td>{{ thread.title }}</td>
                 <td>{{ thread.topic }}</td>
                 <td>{{ thread.createdat ? thread.createdat|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ thread.author }}</td>
                 <td>
                     <a href="{{ path('app_thread_show', {'id': thread.id}) }}">Show</a>
                     <a href="{{ path('app_thread_edit', {'id': thread.id}) }}">Edit</a>

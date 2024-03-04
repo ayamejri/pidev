@@ -1,3 +1,7 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
+app_qr_codes_post:
+    path: /qr-codes/post/{postId}
+    controller: App\Controller\QrCodeController::generateQrCodeForPost
+    methods: ['GET']

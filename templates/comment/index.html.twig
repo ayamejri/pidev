@@ -1,0 +1,15 @@
+{# templates/comment/index.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Comments{% endblock %}
+
+{% block body %}
+    <h1>Comments</h1>
+
+    <ul>
+        {% for comment in comments %}
+            <li>{{ comment.name }} - {{ comment.email }} - {{ comment.body }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

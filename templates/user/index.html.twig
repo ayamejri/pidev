@@ -1,0 +1,60 @@
+{% extends 'back.html.twig' %}
+
+{% block title %}User index{% endblock %}
+
+{% block body %}
+    <div class="card">
+<div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">User Table</h5>
+
+            <!-- User Table -->
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Roles</th>
+                        <th scope="col">Nom_user</th>
+                        <th scope="col">Prenom_user</th>
+                        <th scope="col">Adresse_user</th>
+                        <th scope="col">Tel_user</th>
+                       
+                 
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <th scope="row">{{ user.id }}</th>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
+                            <td>{{ user.nomUser }}</td>
+                            <td>{{ user.prenomUser }}</td>
+                            <td>{{ user.adresseUser }}</td>
+                            <td>{{ user.telUser }}</td>
+                           
+                            <td>
+                                <a href="{{ path('app_user_show', {'id': user.id}) }}">show</a>
+                                <a href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="10">No records found</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <!-- End User Table -->
+        </div>
+    </div>
+
+    <a href="{{ path('app_user_new') }}" class="btn btn-primary mt-3">Create new</a>
+     </div>
+     </div>
+    </div>
+{% endblock %}

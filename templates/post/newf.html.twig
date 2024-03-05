@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Post{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .form-control {
+            height: 200px; /* Adjust the height as needed */
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <h1>Create new Post</h1>
+
+    {{ form_start(form) }}
+    {{ form_row(form.title) }}
+    <div class="form-group">
+        <label for="{{ form.description.vars.id }}">Description</label>
+        {{ form_widget(form.description, { 'attr': {'class': 'form-control'} }) }}
+    </div>
+    {{ form_row(form.createdAt) }}
+    {{ form_row(form.author) }}
+    {{ form_row(form.thread) }}
+    <button type="submit">Create</button>
+    {{ form_end(form) }}
+
+    <a href="{{ path('app_post_indexf') }}">Back to list</a>
+{% endblock %}
+

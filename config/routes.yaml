@@ -1,3 +1,19 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
+app_qr_codes_post:
+    path: /qr-codes/post/{postId}
+    controller: App\Controller\QrCodeController::generateQrCodeForPost
+    methods: ['GET']
+
+app_thread_like:
+    path: /thread/threadf/{id}/like
+    controller: App\Controller\ThreadController::likeThread
+    methods: ['POST']
+
+app_thread_dislike:
+    path: /thread/threadf/{id}/dislike
+    controller: App\Controller\ThreadController::dislikeThread
+    methods: ['POST']
+
+

@@ -1,0 +1,61 @@
+{% extends 'backend.html.twig' %}
+
+{% block title %}Post index{% endblock %}
+
+{% block body %}
+    <h1>Post index</h1>
+
+    <form action="{{ path('app_post_index') }}" method="get">
+        <div class="form-group">
+            <label for="keyword">Search by Keyword:</label>
+            <input type="text" name="keyword" id="keyword" value="{{ app.request.query.get('keyword') }}" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="sortBy">Sort by:</label>
+            <select name="sortBy" id="sortBy" class="form-control">
+                <option value="">Select</option>
+                <option value="createdAtDescending" {% if app.request.query.get('sortBy') == 'createdAtDescending' %}selected{% endif %}>Created At (Descending)</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Search & Sort</button>
+    </form>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Created At</th>
+                <th>Actions</th>
+                <th>Author</th>
+                <th>Generate QR Code</th> <!-- New column header -->
+            </tr>
+        </thead>
+        <tbody>
+        {% for post in posts %}
+            <tr>
+                <td>{{ post.id }}</td>
+                <td>{{ post.title }}</td>
+                <td>{{ post.description }}</td>
+                <td>{{ post.createdAT ? post.createdAT|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ post.author }}</td>
+                <td>
+                    <a href="{{ path('app_post_show', {'id': post.id}) }}">Show</a>
+                    <a href="{{ path('app_post_edit', {'id': post.id}) }}">Edit</a>
+                </td>
+                <td>
+                    <a href="{{ path('app_qr_codes_post', {'postId': post.id}) }}" class="btn btn-info">Generate QR Code</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">No records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_post_new') }}" class="btn btn-success">Create new</a>
+    <a href="{{ path('app_post_pdf', {'id': 1}) }}" class="btn btn-primary">Generate PDF of all posts</a>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Latest Posts{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        /* Your CSS styles here */
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1 class="mb-4">Latest Posts</h1>
+
+        <!-- Search Form -->
+        <form action="{{ path('app_post_indexf') }}" method="get" class="mb-4">
+            <div class="form-group">
+                <label for="searchInput">Search by Keyword:</label>
+                <input type="text" name="keyword" id="searchInput" value="{{ app.request.query.get('keyword') }}" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary">Search And Sort</button>
+        </form>
+
+        <!-- Sorting Dropdown -->
+        <div class="form-group">
+            <label for="sortBySelect">Sort by:</label>
+            <select name="sortBy" id="sortBySelect" class="form-control" onchange="this.form.submit()">
+                <option value="">Select</option>
+                <option value="createdAtDescending" {% if app.request.query.get('sortBy') == 'createdAtDescending' %}selected{% endif %}>Created At (Descending)</option>
+            </select>
+        </div>
+
+        <div class="row">
+            {% for post in posts %}
+                <div class="col-md-6">
+                    <div class="post-card animated fadeInUp">
+                        <h2 class="post-title">{{ post.title }}</h2> <!-- Big title -->
+                        <p class="post-description">{{ post.description }}</p>
+                        <div class="post-attributes">
+                            <p>Thread: {{ post.thread.title }}</p>
+                            <p>Author: {{ post.thread.author }}</p>
+                        </div>
+                        <a href="{{ path('app_post_showf', {'id': post.id}) }}" class="btn read-more-btn">Read More</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <a href="{{ path('app_post_newf') }}" class="btn btn-success mt-4">Create New Post</a>
+        
+        <!-- Button to go to threads page -->
+        <a href="{{ path('app_thread_indexf') }}" class="btn btn-primary mt-4">Go to Threads</a>
+    </div>
+{% endblock %}

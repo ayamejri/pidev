@@ -6,7 +6,8 @@ use App\Entity\Post;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType; // Import TextareaType
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType; // Import DateTimeType
 use Symfony\Bridge\Doctrine\Form\Type\EntityType; 
 use App\Entity\Thread; 
 
@@ -16,12 +17,13 @@ class PostType extends AbstractType
     {
         $builder
             ->add('title')
-            ->add('description')
+            ->add('description', TextareaType::class, [ 
+                'attr' => ['rows' => 8] // Adjust the number of rows to make the textarea bigger
+            ])
             ->add('createdAt', DateTimeType::class, [ 
-                'widget' => 'choice', // Render as a single input field
-                'html5' => false, // Allow non-HTML5 browsers to fallback to a text input
-                'format' => 'yyyy-MM-dd HH:mm:ss', // Date and time format
-                // You can add more options like 'attr' to specify additional attributes for the input field if needed
+                'widget' => 'choice',
+                'html5' => false,
+                'format' => 'yyyy-MM-dd HH:mm:ss',
             ])
             ->add('author')
             ->add('thread', EntityType::class, [ 

@@ -1,20 +1,70 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Thread{% endblock %}
+{% block title %}Edit Post{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/vendor/aos/aos.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
+    <style>
+        /* Your custom CSS styles */
+        .post-card {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+            background-color: #fff; /* Example background color */
+        }
+
+        .post-card:hover {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .post-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .post-info {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .read-more-btn {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-transform: uppercase;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .read-more-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+{% endblock %}
 
 {% block body %}
     <div class="container mt-4">
-        <h1>Edit Thread</h1>
+        <h1 class="mb-4">Edit Thread</h1>
 
-        <div class="card">
+        <div class="card post-card">
             <div class="card-body">
-                {{ include('thread/_form.html.twig', {'button_label': 'Update'}) }}
+                {{ include('post/_form.html.twig', {'button_label': 'Update'}) }}
             </div>
         </div>
 
-        <a href="{{ path('app_thread_indexf') }}" class="btn btn-primary mt-3">Back to List</a>
-
-        {{ include('thread/_delete_form.html.twig') }}
+        <a href="{{ path('app_post_indexf') }}" class="btn btn-primary mt-3">Back to List</a>
     </div>
 {% endblock %}
-

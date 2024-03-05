@@ -193,6 +193,35 @@ public function deletef(Request $request, Thread $thread, EntityManagerInterface
 
     return $this->redirectToRoute('app_thread_indexf', [], Response::HTTP_SEE_OTHER);
 }
+#[Route('/threadf', name: 'app_thread_like', methods: ['POST'])]
+    public function likeThread(Thread $thread, EntityManagerInterface $entityManager): Response
+    {
+        // Implement your logic to handle liking a thread here
+        
+        // For example, you might increment a 'likes' counter for the thread
+        $thread->incrementLikes();
+        
+        // Persist the changes to the database
+        $entityManager->flush();
+        
+        // Return a response, e.g., a JSON response indicating success
+        return $this->json(['message' => 'Thread liked successfully']);
+    }
+
+    #[Route('/threadf', name: 'app_thread_dislike', methods: ['POST'])]
+    public function dislikeThread(Thread $thread, EntityManagerInterface $entityManager): Response
+    {
+        // Implement your logic to handle disliking a thread here
+        
+        // For example, you might decrement a 'likes' counter for the thread
+        $thread->decrementLikes();
+        
+        // Persist the changes to the database
+        $entityManager->flush();
+        
+        // Return a response, e.g., a JSON response indicating success
+        return $this->json(['message' => 'Thread disliked successfully']);
+    }
 
     
 }

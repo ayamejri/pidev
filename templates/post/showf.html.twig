@@ -2,21 +2,52 @@
 
 {% block title %}Post{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/vendor/aos/aos.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
+    <style>
+        /* Custom CSS styles */
+        .post-container {
+            margin-bottom: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #fff;
+        }
+
+        .post-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .post-description {
+            font-size: 1rem;
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        .post-meta {
+            font-size: 0.9rem;
+            color: #888;
+        }
+    </style>
+{% endblock %}
+
 {% block body %}
     <div class="container mt-4">
         <h1 class="mb-4">Post: {{ post.title }}</h1>
 
-        <div class="card mb-4">
-            <div class="card-body">
-                <h5 class="card-title">Post Information</h5>
-                <ul class="list-group">
-                    <li class="list-group-item"><strong>Title:</strong> {{ post.title }}</li>
-                    <li class="list-group-item"><strong>Description:</strong> {{ post.description }}</li>
-                    <li class="list-group-item"><strong>Created At:</strong> {{ post.createdAT ? post.createdAT|date('Y-m-d H:i:s') : '' }}</li>
-                    <li class="list-group-item"><strong>Author:</strong> {{ post.author }}</li>
-                    <li class="list-group-item"><strong>Thread:</strong> {{ post.thread.title }}</li>
-                </ul>
-            </div>
+        <div class="post-container">
+            <h2 class="post-title">{{ post.title }}</h2>
+            <p class="post-description">{{ post.description }}</p>
+            <p class="post-meta">Created At: {{ post.createdAT ? post.createdAT|date('Y-m-d H:i:s') : '' }}</p>
+            <p class="post-meta">Author: {{ post.author }}</p>
+            <p class="post-meta">Thread: {{ post.thread.title }}</p>
         </div>
 
         <a href="{{ path('app_post_indexf') }}" class="btn btn-primary">Back to List</a>

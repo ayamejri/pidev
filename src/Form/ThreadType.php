@@ -6,6 +6,7 @@ use App\Entity\Thread;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType; // Import TextareaType
 
 class ThreadType extends AbstractType
 {
@@ -13,7 +14,9 @@ class ThreadType extends AbstractType
     {
         $builder
             ->add('title')
-            ->add('topic')
+            ->add('topic', TextareaType::class, [ 
+                'attr' => ['rows' => 8] // Adjust the number of rows to make the textarea bigger
+            ])
             ->add('createdat')
             ->add('author')
         ;

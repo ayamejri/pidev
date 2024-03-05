@@ -31,6 +31,9 @@ class Thread
     #[ORM\Column(length: 255)]
     private ?string $author = null;
 
+    #[ORM\Column(type: Types::INTEGER)]
+    private int $likes = 0; // Default value is 0
+
     public function __construct()
     {
         $this->relation = new ArrayCollection();
@@ -118,5 +121,27 @@ class Thread
         $this->author = $author;
 
         return $this;
+    }
+
+    public function getLikes(): int
+    {
+        return $this->likes;
+    }
+
+    public function setLikes(int $likes): self
+    {
+        $this->likes = $likes;
+
+        return $this;
+    }
+
+    public function incrementLikes(): void
+    {
+        $this->likes++;
+    }
+
+    public function decrementLikes(): void
+    {
+        $this->likes--;
     }
 }

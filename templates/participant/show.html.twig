@@ -1,0 +1,37 @@
+{% extends 'back.html.twig' %}
+
+
+{% block title %}
+participant index
+{% endblock %}
+
+{% block body %}
+    <h1>participant</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ participant.id }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ participant.description }}</td>
+            </tr>
+            <tr>
+                <th>dateParticipation</th>
+                <td>{{ participant.dateParticipation ? participant.dateParticipation|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Evenement</th>
+                <td>{{ participant.Evenement}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_participant_index') }}">back to list</a>
+
+    <a href="{{ path('app_participant_edit', {'id': participant.id}) }}">edit</a>
+
+    {{ include('participant/_delete_form.html.twig') }}
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends 'basePDF.html.twig' %}
+
+{% block title %}Reclamation index{% endblock %}
+
+{% block body %}
+    <h1 align="center">Liste des reclamations</h1>
+
+    <table border="1" cellspacing="0" cellpadding="5" align="center">
+        <thead>
+            <tr>
+                <th>Type de reclamation</th>
+                <th>Nom d'utilisateur</th>
+                <th>Description</th>
+                <th>Votre réponse</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for reclamation in reclamations %}
+                <tr>
+                    <td>{{ reclamation.type }}</td>
+                    <td>{{ reclamation.name }}</td>
+                    <td>{{ reclamation.description }}</td>
+                    <td>{{ reclamation.reponse.description }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div id="reclamationChart" style="width: 80%; margin: 20px auto;">
+        <canvas id="myChart"></canvas>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var types = [];
+            var counts = [];
+
+            {% for reclamation in reclamations %}
+                types.push("{{ reclamation.type }}");
+                counts.push(1);  // Assuming each reclamation contributes 1 to the count
+            {% endfor %}
+
+            var ctx = document.getElementById('myChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: types,
+                    datasets: [{
+                        label: 'Number of Reclamations',
+                        data: counts,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+      <h2 align="center">Statistics</h2>
+    <table border="1" cellspacing="0" cellpadding="5" align="center">
+        <thead>
+            <tr>
+                <th>Type de reclamation</th>
+                <th>Number of Reclamations</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for type, count in statistics %}
+                <tr>
+                    <td>{{ type }}</td>
+                    <td>{{ count }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -29,6 +29,8 @@ class Reclamation
     private ?string $name = null;
     #[ORM\Column]
     private ?int $etat = null;
+   #[ORM\Column]  
+     private ?bool $isNotified = false;
 
     #[ORM\OneToOne(inversedBy: 'reclamation', cascade: ['persist', 'remove'])]
     private ?Reponse $reponse = null;
@@ -113,6 +115,18 @@ class Reclamation
     public function setReponse(?Reponse $reponse): static
     {
         $this->reponse = $reponse;
+
+        return $this;
+    }
+    public function getIsNotified(): bool
+    {
+        return $this->isNotified;
+    }
+
+
+    public function setIsNotified(bool $isNotified): self
+    {
+        $this->isNotified = $isNotified;
 
         return $this;
     }

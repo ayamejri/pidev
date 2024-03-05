@@ -42,6 +42,20 @@ $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
     {% if reclamation.etat == 0 %}
         Non répondu
     {% else %}
+    <script>
+    const eventSource = new EventSource("/sse");
+
+    eventSource.onmessage = function (event) {
+        const data = JSON.parse(event.data);
+        console.log('Nouvelle notification:', data);
+         Swal.fire({
+            title: 'Nouvelle notification',
+            text: data.message,
+            icon: 'success',
+        });
+
+    };
+</script>
        {{ reclamation.reponse.description }}
     {% endif %}
 </td>

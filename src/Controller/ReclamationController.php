@@ -10,7 +10,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
+use Twilio\Rest\Client;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 
 class ReclamationController extends AbstractController
@@ -29,6 +33,18 @@ class ReclamationController extends AbstractController
             $reclam->setEtat(0);
             $em->persist($reclam);
             $em->flush();
+            
+$accountSid = 'AC15ea41bd50c111744636d34f048787b2';
+$authToken = '3ad2d5851a7db94610f4578ef7fa543e';
+$client = new Client($accountSid, $authToken);
+
+$message = $client->messages->create(
+    '+21621182685', 
+    [
+        'from' => '+15072463455', 
+        'body' => 'nouvelle reclamation de la par de  ' . $form->get('name')->getData(). '  il/elle dit:' . $form->get('description')->getData(),
+    ]
+);
 
             return $this->redirectToRoute('add_Reclam');
         
@@ -133,7 +149,7 @@ class ReclamationController extends AbstractController
 
     //Query Builder: Question 1              
     //http://localhost:8000/author/list/OrderByEmail
-    #[Route('/reclamation/list/OrderBytype', name: 'app_reclamation_list_ordered', methods: ['GET'])]
+    #[Route('/reclamation/lis', name: 'app_reclamation_list_ordered', methods: ['GET'])]
     public function listAuthorOrderByEmail(ReclalmationRepository $reclamRepository): Response
     {
         return $this->render('reclamation/orderedList.html.twig', [
@@ -156,4 +172,52 @@ class ReclamationController extends AbstractController
            ]);
 
        }
+       #[Route('/generate-pdf', name: 'generate_pdf')]
+       public function pdf(ReclamationRepository $ReclamationRepository)
+       {
+           // Configure Dompdf according to your needs
+           $pdfOptions = new Options();
+           $pdfOptions->set('defaultFont', 'Arial');
+       
+           // Instantiate Dompdf with our options
+           $dompdf = new Dompdf($pdfOptions);
+           $statistics = $this->calculateStatistics($ReclamationRepository->findAll());
+           // Retrieve the HTML generated in our twig file
+           $html = $this->renderView('reponse/pdf_template.html.twig', [
+               'reclamations' => $ReclamationRepository->findAll(),
+               'statistics' => $statistics,
+           ]);
+       
+           // Load HTML to Dompdf
+           $dompdf->loadHtml($html);
+       
+           // (Optional) Setup the paper size and orientation 'portrait' or 'portrait'
+           $dompdf->setPaper('A4', 'portrait');
+       
+           // Render the HTML as PDF
+           $dompdf->render();
+       
+           // Get the generated PDF content
+           $output = $dompdf->output();
+       
+           // Create a Symfony Response with the PDF content
+           $response = new Response($output);
+       
+           // Set the response headers
+           $response->headers->set('Content-Type', 'application/pdf');
+           $response->headers->set('Content-Disposition', 'inline; filename="ListeDesreclamations.pdf"');
+       
+           return $response;
+       }
+ private function calculateStatistics($reclamations)
+{
+    $statistics = [];
+
+    foreach ($reclamations as $reclamation) {
+        $type = $reclamation->getType();
+        $statistics[$type] = isset($statistics[$type]) ? $statistics[$type] + 1 : 1;
+    }
+
+    return $statistics;
+}
 }

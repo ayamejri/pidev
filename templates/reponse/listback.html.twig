@@ -1,6 +1,7 @@
 {% extends 'backend.html.twig' %}
 {% block reclamation %}
     <h1>Réclamations Ajoutées</h1>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 	<script>
 		$(document).ready(function () {
@@ -12,8 +13,12 @@ $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
 })
 });
 	</script>
+    
     {% if reclamations is not empty %}
-    <input type="search" id="myInput" class="form-control pl-6" placeholder="Search reponse"/>
+   <input type="search" id="myInput" class="form-control pl-6" placeholder="Search reponse"/>
+        
+
+                 
         <table  class="table" id ="mytable">
             <thead>
                 <tr>
@@ -27,7 +32,7 @@ $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
             </thead>
             <tbody>
                 {% for reclamation in reclamations %}
-                    <tr>
+               
                         <td>{{ reclamation.type }}</td>
                        
                         <td>{{ reclamation.description }}</td>
@@ -75,11 +80,23 @@ $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
         {% endif %}
     {% endif %}
 </td>
+
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
     {% else %}
         <p>Aucune réclamation ajoutée pour le moment.</p>
+        
     {% endif %}
+    
+{% set pdf = 1 %}
+          {% for reclamation in reclamations %}
+    {% if reclamation.etat == 0 %}
+           {% set pdf = 0 %}
+             {% endif %}               
+                      {% endfor %}
+                     {% if pdf == 1 %}
+                       <a href="{{ path('generate_pdf' )}}" class="btn btn-danger" > <i class="fas fa-file-pdf"></i> Export PDF</a> 
+                       {% endif %}       
 {% endblock %}

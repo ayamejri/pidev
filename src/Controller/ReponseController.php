@@ -11,9 +11,17 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Reclamation;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+
 
 class ReponseController extends AbstractController
 {
+   
+
+   
     #[Route('/reponse', name: 'app_reponse')]
     public function index(): Response
     {
@@ -22,7 +30,7 @@ class ReponseController extends AbstractController
         ]);
     }
     #[Route('/addreponse', name: 'add_Rep')]
-    public function addRep(ManagerRegistry $manager, Request $request): Response
+    public function addRep(ManagerRegistry $manager, Request $request,MailerInterface $mailer): Response
     {
         $em = $manager->getManager();
         $reclamationId = $request->query->get('id');
@@ -44,7 +52,18 @@ class ReponseController extends AbstractController
     
             
             $reclamation->setEtat(1);
+            $pdf=1;
             $em->flush();
+            $email = (new Email())
+        ->from('bekir.emna@esprit.tn')
+        ->To('bekir.emna@esprit.tn')
+        ->subject('reponse reclamation')
+        ->text("vous avez recu une reponse a votre reclamation  " . $form->get('description')->getData(),);
+        $mailer->send($email);
+       
+
+
+          
     
             return $this->redirectToRoute('listback_Reclamation');
         }
@@ -71,5 +90,7 @@ class ReponseController extends AbstractController
         return $this->renderForm('reponse/editrep.html.twig', ['form' => $form]);
 
     }
+    
+    
 }
 

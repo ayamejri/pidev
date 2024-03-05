@@ -1,4 +1,8 @@
 {
+    "controllers": [],
+    "entrypoints": []
+}
+{
     "controllers": {
         "@symfony/ux-turbo": {
             "turbo-core": {

@@ -1,5 +1,5 @@
 <?php
-// src/Service/PdfGeneratorService.php
+
 namespace App\Entity;
 
 use TCPDF;

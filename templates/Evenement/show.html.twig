@@ -1,0 +1,49 @@
+{% extends 'back.html.twig' %}
+
+
+{% block title %}
+evenement index
+{% endblock %}
+
+{% block body %}
+    <h1>evenement</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ evenement.id }}</td>
+            </tr>
+            <tr>
+                <th>ImageEvenement</th>
+                <td><img src= "{{ asset('uploads/' ~evenement.ImageEvenement)}}" style=" width:150px; height:150 px; " alt=""></td>
+            </tr>
+            <tr>
+                <th>themeEvenement</th>
+                <td>{{ evenement.themeEvenement }}</td>
+            </tr>
+            <tr>
+                <th>typeEvenement</th>
+                <td>{{ evenement.typeEvenement }}</td>
+            </tr>
+            <tr>
+                <th>dateDebut</th>
+                <td>{{ evenement.dateDebut ? evenement.dateDebut|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>dateFin</th>
+                <td>{{ evenement.dateFin ? evenement.dateFin|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>nbrParticipant</th>
+                <td>{{ evenement.nbrParticipant }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_evenement_index') }}">back to list</a>
+
+    <a href="{{ path('app_evenement_edit', {'id': evenement.id}) }}">edit</a>
+
+    {{ include('evenement/_delete_form.html.twig') }}
+{% endblock %}

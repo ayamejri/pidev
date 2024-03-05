@@ -1,0 +1,13 @@
+{% extends 'front.html.twig' %}
+
+
+{% block title %}
+evenement index
+{% endblock %}
+{% block body %}
+    <h1>Create new participant</h1>
+
+    {{ include('evenement/_form.html.twig') }}
+
+    <a href="{{ path('app_evenement_indexFront') }}">back to list</a>
+{% endblock %}

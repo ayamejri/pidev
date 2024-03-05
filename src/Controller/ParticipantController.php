@@ -35,7 +35,7 @@ class ParticipantController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $to = $participant->getDescription();
-            $mailer->sendEmail($to);
+            
             $entityManager->persist($participant);
             $entityManager->flush();
 

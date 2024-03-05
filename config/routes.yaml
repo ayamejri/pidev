@@ -3,7 +3,7 @@
 #    controller: App\Controller\DefaultController::index
 app_qr_codes_post:
     path: /qr-codes/post/{postId}
-    controller: App\Controller\QrCodeController::generateQrCodeForPost
+    controller: App\Controller\QrController::generateQrCodeForPost
     methods: ['GET']
 
 app_thread_like:

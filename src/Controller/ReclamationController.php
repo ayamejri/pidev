@@ -34,17 +34,17 @@ class ReclamationController extends AbstractController
             $em->persist($reclam);
             $em->flush();
             
-$accountSid = 'AC15ea41bd50c111744636d34f048787b2';
-$authToken = '3ad2d5851a7db94610f4578ef7fa543e';
-$client = new Client($accountSid, $authToken);
+//$accountSid = 'AC15ea41bd50c111744636d34f048787b2';
+//$authToken = '3ad2d5851a7db94610f4578ef7fa543e';
+//$client = new Client($accountSid, $authToken);
 
-$message = $client->messages->create(
-    '+21621182685', 
-    [
-        'from' => '+15072463455', 
-        'body' => 'nouvelle reclamation de la par de  ' . $form->get('name')->getData(). '  il/elle dit:' . $form->get('description')->getData(),
-    ]
-);
+//$message = $client->messages->create(
+  //  '+21621182685', 
+   // [
+    //    'from' => '+15072463455', 
+    //    'body' => 'nouvelle reclamation de la par de  ' . $form->get('name')->getData(). '  il/elle dit:' . $form->get('description')->getData(),
+   // ]
+//);
 
             return $this->redirectToRoute('add_Reclam');
         

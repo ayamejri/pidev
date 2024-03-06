@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Dompdf\Dompdf;
 use Dompdf\Options;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 
 
 #[Route('/post')]
@@ -75,7 +77,7 @@ class PostController extends AbstractController
         ]);
     }
         #[Route('/post/postf/newf', name: 'app_post_newf', methods: ['GET', 'POST'])]
-    public function newf(Request $request, EntityManagerInterface $entityManager): Response
+    public function newf(Request $request, EntityManagerInterface $entityManager,MailerInterface $mailer): Response
     {
         $post = new Post();
         $form = $this->createForm(PostType::class, $post);
@@ -84,6 +86,13 @@ class PostController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($post);
             $entityManager->flush();
+
+            $email = (new Email())
+            ->from('bekir.emna@esprit.tn')
+            ->To('hannachi.oussama@esprit.tn')
+            ->subject('new post')
+            ->text("new post has been added to thakafa's Blog ");
+            $mailer->send($email);
 
             return $this->redirectToRoute('app_post_indexf', [], Response::HTTP_SEE_OTHER);
         }

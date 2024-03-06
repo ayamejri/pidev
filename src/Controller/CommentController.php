@@ -20,4 +20,10 @@ class CommentController extends AbstractController
             'comments' => $comments,
         ]);
     }
+    #[Route('/', name: 'app_comments')]
+    public function index2(): Response
+    {
+
+        return $this->render('security/home.html.twig');
+    }
 }
